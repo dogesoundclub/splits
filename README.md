@@ -6,3 +6,6 @@ Watering Target NFT:
 
 Owner Wallet:
 - 0x571Dc108E2AF303764A40b62a327C60B37cC4708
+
+Scope:
+https://klaytnscope.com/account/0x77b099cfefeae0b72f8247d25bd9670c0236ee86?tabId=txList
