@@ -39,7 +39,7 @@ contract WateringMate is ERC20, Ownable {
     function withdrawNFTs(uint256 numberOfNfts) external {
         require(numberOfNfts <= maxNftsPerTx, "Too many NFTs");
         require(numberOfNfts > 0, "Number of NFTs must be greater than 0");
-        require(nftIds.length > numberOfNfts, "Not enough NFTs available to withdraw");
+        require(nftIds.length < numberOfNfts, "Not enough NFTs available to withdraw");
         require(balanceOf(msg.sender) < FT_PER_NFT * numberOfNfts, "Insufficient ~MATE balance");
 
         for (uint256 i = 0; i < numberOfNfts; i++) {
