@@ -3,9 +3,10 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract SplitMate is ERC20, Ownable {
+contract SplitMate is ERC20, Ownable, ERC20Permit {
     IERC721 public immutable nftToken;
     uint256 public constant MATE_PER_NFT = 1000000000000000000;
     uint256 public totalDepositedNfts = 0;
@@ -18,6 +19,7 @@ contract SplitMate is ERC20, Ownable {
 
     constructor(address _nftTokenAddress)
         ERC20("Split Mate", "Split MATE")
+        ERC20Permit("Split Mate")
         Ownable(msg.sender)
     {
         nftToken = IERC721(_nftTokenAddress);
