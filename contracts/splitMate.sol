@@ -8,12 +8,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SplitMate is ERC20, Ownable, ERC20Permit {
     IERC721 public immutable nftToken;
-    uint256 public constant MATE_PER_NFT = 1000000000000000000;
+    uint256 public constant SPLIT_MATE_PER_NFT = 1000000000000000000;
     uint256 public totalDepositedNfts = 0;
 
     mapping(uint256 => bool) private nftDeposited;
 
-    // 이벤트 정의
     event NFTDeposited(address indexed depositor, uint256 indexed nftId);
     event NFTWithdrawn(address indexed withdrawer, uint256 indexed nftId);
 
@@ -27,33 +26,46 @@ contract SplitMate is ERC20, Ownable, ERC20Permit {
 
     function depositNFTs(uint256[] calldata nftIdsToDeposit) external {
         require(nftIdsToDeposit.length > 0, "Must deposit at least one NFT");
-        address expectedNFTAddress = 0xE47E90C58F8336A2f24Bcd9bCB530e2e02E1E8ae;
         for (uint256 i = 0; i < nftIdsToDeposit.length; i++) {
             uint256 nftId = nftIdsToDeposit[i];
             require(nftToken.ownerOf(nftId) == msg.sender, "You must own the NFT");
             require(!nftDeposited[nftId], "NFT is already deposited");
 
-            nftToken.transferFrom(msg.sender, address(this), nftId);
+            // 상태 변경
             nftDeposited[nftId] = true;
-            emit NFTDeposited(msg.sender, nftId); // 이벤트 발생
         }
-        _mint(msg.sender, MATE_PER_NFT * nftIdsToDeposit.length);
+        
+        // 상태 변경 후 외부 호출
+        for (uint256 i = 0; i < nftIdsToDeposit.length; i++) {
+            nftToken.transferFrom(msg.sender, address(this), nftIdsToDeposit[i]);
+            emit NFTDeposited(msg.sender, nftIdsToDeposit[i]);
+        }
+
+        _mint(msg.sender, SPLIT_MATE_PER_NFT * nftIdsToDeposit.length);
         totalDepositedNfts += nftIdsToDeposit.length;
     }
 
     function withdrawNFTs(uint256[] calldata nftIdsToWithdraw) external {
         require(nftIdsToWithdraw.length > 0, "Must withdraw at least one NFT");
-        require(balanceOf(msg.sender) >= MATE_PER_NFT * nftIdsToWithdraw.length, "Insufficient MATE balance");
+        require(balanceOf(msg.sender) >= SPLIT_MATE_PER_NFT * nftIdsToWithdraw.length, "Insufficient MATE balance");
 
+        uint256 amountToBurn = SPLIT_MATE_PER_NFT * nftIdsToWithdraw.length;
+
+        // 상태 변경
         for (uint256 i = 0; i < nftIdsToWithdraw.length; i++) {
             uint256 nftId = nftIdsToWithdraw[i];
             require(nftDeposited[nftId], "NFT not deposited");
 
-            nftToken.transferFrom(address(this), msg.sender, nftId);
             nftDeposited[nftId] = false;
-            emit NFTWithdrawn(msg.sender, nftId);
+            totalDepositedNfts--;
         }
-        _burn(msg.sender, MATE_PER_NFT * nftIdsToWithdraw.length);
-        totalDepositedNfts -= nftIdsToWithdraw.length;
+
+        _burn(msg.sender, amountToBurn);
+
+        // 상태 변경 후 외부 호출
+        for (uint256 i = 0; i < nftIdsToWithdraw.length; i++) {
+            nftToken.transferFrom(address(this), msg.sender, nftIdsToWithdraw[i]);
+            emit NFTWithdrawn(msg.sender, nftIdsToWithdraw[i]);
+        }
     }
 }
