@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react"
-import { ethers } from "ethers";
 import { useAccount } from "wagmi"
 import Link from "next/link"
 
@@ -68,9 +67,6 @@ const Erc721to20 = () => {
     return (
       <>
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
-          <section>
-  
-          </section>
           <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
             <h1 className="text-scale-down text-center font-heading text-xl lg:text-6xl">Split Mate</h1>
             <ScrollArea type="always" scrollbars="vertical" style={{ height: 360, maxWidth: 240 }}>
