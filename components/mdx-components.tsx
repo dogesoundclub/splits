@@ -10,7 +10,7 @@ const components = {
   h1: ({ className, ...props }) => (
     <h1
       className={cn(
-        "mt-2 scroll-m-20 text-4xl font-bold tracking-tight",
+        "mt-2 scroll-m-20 text-4xl font-heading tracking-tight",
         className
       )}
       {...props}
@@ -114,7 +114,7 @@ const components = {
   th: ({ className, ...props }) => (
     <th
       className={cn(
-        "border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right",
+        "border px-4 py-2 text-left font-heading [&[align=center]]:text-center [&[align=right]]:text-right",
         className
       )}
       {...props}

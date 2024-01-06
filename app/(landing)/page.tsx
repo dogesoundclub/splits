@@ -33,61 +33,34 @@ export default function IndexPage() {
     const chainId = useChainId();
     const account = useAccount();
 
-    const [nftIds, setNftIds] = useState<string[]>([]); // or useState<number[]>([]) if your IDs are numbers
-    const [offset, setOffset] = useState(0); // Used for pagination
-    const loadCount = 10;  // Number of NFTs to load each time
+    const [isLoading, setIsLoading] = useState(true);
+    const [allNftsLoaded, setAllNftsLoaded] = useState(false);
+
+    const [nftIds, setNftIds] = useState<string[]>([]);
+    const [offset, setOffset] = useState(0);
+    const loadCount = 10;
 
     const [sliderValue, setSliderValue] = useState([0]);
     const [checkboxes, setCheckboxes] = useState(new Array(10).fill(false));
     const [balance, setBalance] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
+
     const selected = checkboxes.filter(checkbox => checkbox).length;
-  
-    // useEffect(() => {
-    const init = async () => {
-      const fetchBalanceAndNftIds = async () => {
-        setIsLoading(true);
-        try {
-          const response = await fetch(`/api/721Balance?walletAddress=${address}&page=${page}`);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const responseData = await response.json();
-          if (responseData.statusCode === 200) {
-            setBalance(responseData.data.balanceNumber);
-            console.log("your nft balance:", responseData.data.balanceNumber);
-            setNftIds(responseData.data.nftIds);
-            console.log("your nft ids:", responseData.data.nftIds)
-            setCheckboxes(new Array(responseData.data.nftIds.length).fill(false));
-          } else {
-            // Handle other status codes or errors
-            console.error('Error fetching inscripters:', responseData.message);
-          }
-        } catch (error) {
-          console.error('There was a problem with the fetch operation:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-    
-      fetchBalanceAndNftIds();
-    }
 
-    useEffect(() => {
-        init();
-        }, [page]);
-
-    const fetchMoreNfts = async () => {
-        if (!address || !isConnected) return;
+    const fetchNfts = async () => {
+        if (!address || !isConnected || allNftsLoaded) return;
 
         setIsLoading(true);
+
         try {
-            const response = await fetch(`/api/721Balance?walletAddress=${address}&offset=${offset}&count=${loadCount}`);
+            const response = await fetch(`/api/erc721Balance?walletAddress=${address}&offset=${offset}&count=${loadCount}`);
             const responseData = await response.json();
             if (responseData.statusCode === 200) {
-                setBalance(responseData.data.balanceNumber);
                 setNftIds(prevNfts => [...prevNfts, ...responseData.data.nftIds]);
-                setCheckboxes(prev => [...prev, ...new Array(responseData.data.nftIds.length).fill(false)]);
+                setBalance(responseData.data.balanceNumber);
+
+                if (responseData.data.nftIds.length < loadCount || nftIds.length + responseData.data.nftIds.length >= responseData.data.balanceNumber) {
+                    setAllNftsLoaded(true);
+                }
             } else {
                 console.error('Error fetching NFTs:', responseData.message);
             }
@@ -98,20 +71,17 @@ export default function IndexPage() {
         }
     };
 
-    // Handle scroll event
+    useEffect(() => {
+        fetchNfts();
+    }, [offset, address, isConnected]);
+
     const handleScroll = (event) => {
         const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-
-        // Check if the user has scrolled to the bottom
         if (scrollHeight - scrollTop === clientHeight) {
-            setOffset(prevOffset => prevOffset + loadCount); // Increase offset to load next set of NFTs
+            setOffset(prevOffset => prevOffset + loadCount);
         }
+        console.log("handScroll Event, offset:", offset);
     };
-
-    // Fetch more NFTs when offset changes
-    useEffect(() => {
-        fetchMoreNfts();
-    }, [offset]);
   
     const handleCheckboxChange = (index) => {
       setCheckboxes((prev) => prev.map((checked, i) => (i === index ? !checked : checked)));
@@ -159,10 +129,10 @@ export default function IndexPage() {
             </div>
             {/* <Box style={{ justifyContent: 'center',justifyItems:"center", alignItems: 'center' }}> */}
 
-            <ScrollArea type="always" scrollbars="vertical" style={{ margin: "auto", height: 360, width: 300 , display: 'flex', justifyContent: 'center',justifyItems:"center", alignItems: 'center' }}>
+            <ScrollArea onScroll={handleScroll} type="always" scrollbars="vertical" style={{ margin: "auto", height: 360, width: 330 , display: 'flex', justifyContent: 'center',justifyItems:"center", alignItems: 'center' }}>
               {nftIds && nftIds.map((nftId, index) => (
-                // <Card key={nftId} style={{ width: 270, margin: 'auto' }}>
-                <Card key={nftId} style={{ width: 270 }}>
+                // <Card key={nftId} style={{ width: 300, margin: 'auto' }}>
+                <Card key={`${nftId}-${index}`} style={{ width: 300 }}>
                 <Flex gap="3" align="center">
                   <Checkbox checked={checkboxes[index]} onChange={() => handleCheckboxChange(index)}></Checkbox>  
                   <Flex gap="3" align="center">
@@ -173,10 +143,14 @@ export default function IndexPage() {
                       fallback="T"
                     />
                     <Box>
-                      <Text as="div" size="2" weight="bold">
-                      MATE
+                      <Text
+                        className="font-heading" 
+                        as="div" size="2" weight="bold">
+                        DOGESOUNDCLUB MATE
                       </Text>
-                      <Text as="div" size="2" color="gray">
+                      <Text 
+                        className="font-heading"                         
+                        as="div" size="2" color="gray">
                       #{nftId}
                       </Text>
                     </Box>
@@ -184,14 +158,21 @@ export default function IndexPage() {
                   </Flex>        
                 </Card>
               ))}
+                {isLoading && <div style={{ textAlign: 'center', marginTop: '10px' }}>Loading...</div>}
+                {allNftsLoaded && !isLoading && <div style={{ textAlign: 'center', marginTop: '10px' }}>All NFTs loaded</div>}
             </ScrollArea>
-            <h2 className="font-heading"> {selected} / {balance} SELECTED </h2>
-            <Slider max={nftIds.length} step={1} value={sliderValue} onValueChange={handleSliderChange} style={{ width: 270 }}/>
+            <div className="w-full flex justify-between items-center gap-2" style={{ maxWidth: 300 }}>
+                <Slider max={nftIds.length} step={1} value={sliderValue} onValueChange={handleSliderChange} />
+                <div className="text-right font-heading text-sm">
+                    {selected} / {balance} SELECTED
+                </div>
+            </div>
             {/* </Box>             */}
             <div className="flex flex-col items-center gap-4">
                 <Dialog.Root>
                     <Dialog.Trigger>
                         <Button
+                            className="font-heading" 
                             type="button"
                             size="4"
                             style={{
@@ -239,7 +220,9 @@ export default function IndexPage() {
                             size="4"
                         >CANCEL</Button>
                         </Dialog.Close>
-                        <Dialog.Close>
+                        <Dialog.Close
+                            className="font-heading" 
+                        >
                         <Button onClick={onSplit}
                             type="button"
                             size="4"

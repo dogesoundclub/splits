@@ -151,7 +151,7 @@ export function Editor({ post }: EditorProps) {
             id="title"
             defaultValue={post.title}
             placeholder="Post title"
-            className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
+            className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-heading focus:outline-none"
             {...register("title")}
           />
           <div id="editor" className="min-h-[500px]" />

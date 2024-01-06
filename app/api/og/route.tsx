@@ -72,13 +72,13 @@ export async function GET(req: Request) {
           </svg>
           <div tw="flex flex-col flex-1 py-10">
             <div
-              tw="flex text-xl uppercase font-bold tracking-tight"
+              tw="flex text-xl uppercase font-heading tracking-tight"
               style={{ fontFamily: "Inter", fontWeight: "normal" }}
             >
               {values.type}
             </div>
             <div
-              tw="flex leading-[1.1] text-[80px] font-bold"
+              tw="flex leading-[1.1] text-[80px] font-heading"
               style={{
                 fontFamily: "Cal Sans",
                 fontWeight: "bold",

@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import MateContractABI from '@/contracts/MateContractABI.json';
 
 export async function GET(req: NextRequest, res: NextResponse) {
+  console.log('Requested GET /api/erc721Balance')
   const url = new URL(req.url);
 
   // Use offset and count instead of page
