@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSendTransaction, useWaitForTransaction, useAccount } from 'wagmi';
-import { Slider, Box, Checkbox, Flex, ScrollArea, Card, Avatar, Button, Dialog, Text, TextField } from "@radix-ui/themes";
+import { Slider } from "@/components/ui/slider"
+import { buttonVariants } from "@/components/ui/button"
+import { Box, Checkbox, Flex, ScrollArea, Card, Avatar, Button, Dialog, Text, TextField } from "@radix-ui/themes";
 
 export default function IndexPage() {
     const { address, isConnected } = useAccount();
@@ -22,7 +24,7 @@ export default function IndexPage() {
 
     const fetchNfts = async () => {
         if (!address || !isConnected || allNftsLoaded) return;
-
+    
         setIsLoading(true);
         try {
             const response = await fetch(`/api/erc721Balance?walletAddress=${address}&offset=${offset}&count=${loadCount}`);
@@ -30,6 +32,7 @@ export default function IndexPage() {
             if (responseData.statusCode === 200) {
                 setNftIds(prevNfts => [...prevNfts, ...responseData.data.nftIds]);
                 setBalance(responseData.data.balanceNumber);
+                setIsLoading(false); // Move this line up
                 setAllNftsLoaded(responseData.data.nftIds.length < loadCount || nftIds.length + responseData.data.nftIds.length >= responseData.data.balanceNumber);
             } else {
                 console.error('Error fetching NFTs:', responseData.message);
@@ -37,7 +40,7 @@ export default function IndexPage() {
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         } finally {
-            setIsLoading(false);
+            // Remove this line
         }
     };
 
@@ -47,8 +50,10 @@ export default function IndexPage() {
 
     const handleScroll = (event) => {
         const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-        if (scrollHeight - scrollTop === clientHeight) {
-            setOffset(prevOffset => prevOffset + loadCount);
+        console.log("scrollHeight, scrollTop, clientHeight", scrollHeight, scrollTop, clientHeight)
+        setOffset(prevOffset => prevOffset + loadCount);
+        if (scrollHeight - scrollTop <= clientHeight * 1.1) {
+          setOffset(prevOffset => prevOffset + loadCount);
         }
         console.log("handScroll Event, offset:", offset);
     };
@@ -58,8 +63,10 @@ export default function IndexPage() {
     };
 
     const handleSliderChange = (value) => {
-        setSliderValue(value);
-        setCheckboxes(new Array(value[0]).fill(true).concat(new Array(checkboxes.length - value[0]).fill(false)));
+      setSliderValue(value);
+      // Update the checkboxes based on the slider value
+      const newCheckboxes = checkboxes.map((_, index) => index < value[0]);
+      setCheckboxes(newCheckboxes);
     };
 
     const onSplit = useCallback(async () => {
@@ -103,7 +110,7 @@ export default function IndexPage() {
                           <Flex gap="3" align="center">
                             <Avatar
                               size="3"
-                              src="/images/mates/dscMate-0.png?&w=64&h=64&dpr=2&q=70&crop=focalpoint&fp-x=0.67&fp-y=0.5&fp-z=1.4&fit=crop"
+                              src={`/images/mates/dscMate-${nftId}.png?&w=64&h=64&dpr=2&q=70&crop=focalpoint&fp-x=0.67&fp-y=0.5&fp-z=1.4&fit=crop`}
                               radius="full"
                               fallback="T"
                             />
@@ -127,14 +134,14 @@ export default function IndexPage() {
                       {allNftsLoaded && !isLoading && <div style={{ textAlign: 'center', marginTop: '10px' }}>All NFTs loaded</div>}
                     </ScrollArea>
                     <div className="w-full flex justify-between items-center gap-2" style={{ maxWidth: 300 }}>
-                    <Slider max={nftIds.length} step={1} value={sliderValue} onValueChange={handleSliderChange} />
-                      <div className="text-right font-heading text-sm">
-                          {selected} / {balance} SELECTED
-                      </div>
+                        <Slider max={nftIds.length} step={1} value={sliderValue} onValueChange={handleSliderChange} />
+                        <div className="text-right font-heading text-sm">
+                            {selected} / {balance} SELECTED
+                        </div>
                     </div>
                     <Dialog.Root>
                         <Dialog.Trigger>
-                            <Button className="mt-4" style={{ backgroundColor: 'white', color: 'black', border: '1px solid var(--color-input)', cursor: 'pointer' }}>SPLIT</Button>
+                            <Button className="mt-4 font-heading" style={{ backgroundColor: 'white', color: 'black', border: '1px solid var(--color-input)', cursor: 'pointer' }}>SPLIT</Button>
                         </Dialog.Trigger>
                         <Dialog.Content style={{ maxWidth: 450, textAlign: "center" }}>
                             <Dialog.Title className="font-heading">SPLIT MATE</Dialog.Title>
