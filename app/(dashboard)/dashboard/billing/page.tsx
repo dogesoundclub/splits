@@ -57,7 +57,7 @@ export default async function BillingPage() {
               href="https://stripe.com/docs/testing#cards"
               target="_blank"
               rel="noreferrer"
-              className="font-medium underline underline-offset-8"
+              className="font-heading underline underline-offset-8"
             >
               Stripe docs
             </a>

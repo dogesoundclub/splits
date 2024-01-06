@@ -76,7 +76,7 @@ export function BillingForm({
             {subscriptionPlan.isPro ? "Manage Subscription" : "Upgrade to PRO"}
           </button>
           {subscriptionPlan.isPro ? (
-            <p className="rounded-full text-xs font-medium">
+            <p className="rounded-full text-xs font-heading">
               {subscriptionPlan.isCanceled
                 ? "Your plan will be canceled on "
                 : "Your plan renews on "}

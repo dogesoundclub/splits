@@ -43,11 +43,11 @@ export const metadata = {
   ],
   authors: [
     {
-      name: "shadcn",
-      url: "https://shadcn.com",
+      name: "dogesoundclub",
+      url: "https://dogesoundclub.com",
     },
   ],
-  creator: "shadcn",
+  creator: "dogesoundclub",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
@@ -65,7 +65,7 @@ export const metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     images: [`${siteConfig.url}/og.jpg`],
-    creator: "@shadcn",
+    creator: "@dogesoundclub",
   },
   icons: {
     icon: "/favicon.ico",

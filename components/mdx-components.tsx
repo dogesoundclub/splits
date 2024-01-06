@@ -63,7 +63,7 @@ const components = {
   ),
   a: ({ className, ...props }) => (
     <a
-      className={cn("font-medium underline underline-offset-4", className)}
+      className={cn("font-heading underline underline-offset-4", className)}
       {...props}
     />
   ),

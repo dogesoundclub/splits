@@ -1,19 +1,20 @@
+// app/api/721Balance/route.tsx:
 import { NextRequest, NextResponse } from 'next/server';
 import { ethers } from "ethers";
 import MateContractABI from '@/contracts/MateContractABI.json';
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const url = new URL(req.url);
-  console.log("url.searchParams.get('walletAddress')", url.searchParams.get('walletAddress'));
 
-  const page = parseInt(url.searchParams.get('page') || '0');
-  const pageSize = 10; // Or any other number
+  // Use offset and count instead of page
+  const offset = parseInt(url.searchParams.get('offset') || '0');
+  const count = parseInt(url.searchParams.get('count') || '10'); // Default count to 10 if not specified
 
   const walletAddress = url.searchParams.get('walletAddress');
   if (!walletAddress) {
     return NextResponse.json({
       statusCode: 400,
-      message: 'Missing request body'
+      message: 'Missing wallet address'
     });
   }
 
@@ -25,14 +26,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
   try {
     const balance = await MateContract.balanceOf(walletAddress);
     const balanceNumber = Number(balance);
-    console.log('balance:', balance);
-    console.log('balanceNumber:', balanceNumber);
 
     const nftIds: string[] = [];
 
-    // Start from the index based on the page number
-    const start = page * pageSize;
-    const end = Math.min(start + pageSize, balanceNumber);
+    // Start from the index based on the offset
+    const start = offset;
+    const end = Math.min(start + count, balanceNumber);
 
     for (let i = start; i < end; i++) {
       const id: string = await MateContract.tokenOfOwnerByIndex(walletAddress, i);

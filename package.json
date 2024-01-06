@@ -3,8 +3,8 @@
   "version": "0.2.0",
   "private": true,
   "author": {
-    "name": "shadcn",
-    "url": "https://twitter.com/shadcn"
+    "name": "dogesoundclub",
+    "url": "https://twitter.com/dogesoundclub"
   },
   "scripts": {
     "dev": "concurrently \"contentlayer dev\" \"next dev\"",

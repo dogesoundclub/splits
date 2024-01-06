@@ -3,20 +3,20 @@ import { LandingConfig } from "types"
 export const landingConfig: LandingConfig = {
   mainNav: [
     {
-      title: "Features",
-      href: "/#features",
+      title: "SPLIT",
+      href: "/#split",
     },
     {
-      title: "Pricing",
-      href: "/pricing",
+      title: "Catenate",
+      href: "/catenate",
     },
-    {
-      title: "Blog",
-      href: "/blog",
-    },
-    {
-      title: "Documentation",
-      href: "/docs",
-    },
+    // {
+    //   title: "Blog",
+    //   href: "/blog",
+    // },
+    // {
+    //   title: "Documentation",
+    //   href: "/docs",
+    // },
   ],
 }
