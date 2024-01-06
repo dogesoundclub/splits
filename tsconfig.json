@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "contentlayer/generated": ["./.contentlayer/generated"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".contentlayer/generated"
+, "components/inscribeKuro.mdx", "app/(auth)/login/page.tsx.backup", "app/(auth)/register/page.tsx.backup", "app/(auth)/layout.tsx.backup", "app/(dashboard)/dashboard/page.tsx.backup", "app/(dashboard)/dashboard/layout.tsx.backup", "etc/(editor)/editor/[postId]/page.tsx.backup"  ],
+  "exclude": ["node_modules"]
+}

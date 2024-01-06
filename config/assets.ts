@@ -1,0 +1,46 @@
+const TESTNET = false;
+
+export default {
+
+    isTestnet: TESTNET,
+    chainId: TESTNET ? 1001 : 8217,
+
+    contracts: TESTNET ? {
+        // Testnet
+        Mate: "0xCa7894953066B8C0a05e123454f586CDe4B42Fa7",
+        Attributes: "0x2666D38bcBBB50EC5717ef6B96fb55aA6a2334Cf",
+        DogeSoundContest: "0x5BE7BFee608b2aa0c022D11EFDCCC0bD3477C6Cf",
+        DogeSoundContestV2: "0x676289E02e8c0264417e4bEc9413d6007a686Be3",
+        Vote: "0x2EA83A978747d2F732b5E4D3BeeB12a7c4eDD743",
+        Image: "0x670CE33477dfaEd14e0c1b8C66e1687B10469b8E",
+        Mix: "0xAe0a2e1DA2469FFdf8308160eE64Fe3656d9D9D0",
+        NameV2: "0x3Fc1745CC8336De241aE05139332c3cF676A9cdC",
+        Message: "0x4843027f225da25a017a78eF419191860E482B52",
+        FollowMe: "0xa8D43b45D84169076DccFd4B17C769080A8e86C6",
+        DSCFamily: "0xF75338d3132e2457df4912e6f9b8B505F5ED1670",
+        GovernanceV3: "0x4C886ec19370212c67d26a16A7065598C6152927",
+        MatesPool: "0x6f49D139359D0c7Bf44Df4520494A6ABB39434dD",
+        EMatesPool: "",
+        BiasPool: "",
+        DogeSoundMinter: "",
+    } : {
+        // Mainnet
+        Mate: "0xe47e90c58f8336a2f24bcd9bcb530e2e02e1e8ae",
+        Attributes: "0xB16cA0035f398EA513c063a2F61C7631413bCD7d",
+        DogeSoundContest: "0x90B1a227A69b3A907167fFE7956dc965117CBF20",
+        DogeSoundContestV2: "0x43f3b52C1cb0801efA4EFa6a6b1908746E2a3210",
+        Vote: "0x7f87e061068B04b62a2e119Cef3b44c2d1a177CD",
+        Image: "0x059308948cf1F550E15869f9C3E02dCEb8814F0A",
+        //NameV2: "0xd095c72B42547c7097089E36908d60d13347823a",
+        NameV2: "0x1088fBc780E3FB4a1B61FfbA0e10cdf66b0E8f44",
+        Message: "0x1a693c175E510959F37d54AcFF0fAC0daC8d9a2D",
+        FollowMe: "0x68d0EC90b70407089a419EE99C32a44c0f5Da775",
+        Mix: "0xDd483a970a7A7FeF2B223C3510fAc852799a88BF",
+        DSCFamily: "0x270235979743d6496621B73f0fEA48b66a81Ab0C",
+        GovernanceV3: "0xBdcA781a022edb23AF3fFA41b08CCb6Ca79c0F70",
+        MatesPool: "0xbc9C42267037786f42831d4f36D629A3888c9b4a",
+        EMatesPool: "0x4316feE26c85c7a19063dA597b4DdF1476d0C986",
+        BiasPool: "0x83BD2Fa1806b36bC7B0747e37482544Bed56529e",
+        DogeSoundMinter: "0x9b21a0D48035d88416BCd762A41767ac369477e1",
+    },
+};

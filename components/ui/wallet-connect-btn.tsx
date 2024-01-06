@@ -1,0 +1,5 @@
+function ConnectButton() {
+  return <w3m-button size="sm" />
+}
+
+export { ConnectButton }

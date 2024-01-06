@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -17,8 +17,8 @@ contract SplitMate is ERC20, Ownable, ERC20Permit {
     event NFTWithdrawn(address indexed withdrawer, uint256 indexed nftId);
 
     constructor(address _nftTokenAddress)
-        ERC20("Split Mate", "Split MATE")
-        ERC20Permit("Split Mate")
+        ERC20("SplitCat Mate", "SplitCat MATE")
+        ERC20Permit("SplitCat Mate")
         Ownable(msg.sender)
     {
         nftToken = IERC721(_nftTokenAddress);

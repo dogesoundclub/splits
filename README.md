@@ -1,7 +1,7 @@
 /contracts/splitMate.sol
 - CA: 0x87CAe8Ff4f07D8046e671c6D025CeeA95C73043C
 
-Split Target NFT:
+SplitCat Target NFT:
 - CA: 0xE47E90C58F8336A2f24Bcd9bCB530e2e02E1E8ae
 
 Owner Wallet:
